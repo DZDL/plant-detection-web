@@ -1,5 +1,0 @@
-build:
-  docker:
-    web: heroku.Dockerfile
-run:
-  web: ./setup.sh
