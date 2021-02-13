@@ -1,4 +1,4 @@
-# plant-detection-web
+# Plant detection (Webapp)
 
 Web application of plant-detection repository
 
