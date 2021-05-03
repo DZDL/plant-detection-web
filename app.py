@@ -8,12 +8,14 @@ from plant_detection.PlantDetection import PlantDetection
 input_path = 'input/'
 output_path = 'output/'
 
-command_png2mp4_contours='ffmpeg -framerate 30 -i ' + \
+command_png2mp4_contours = 'ffmpeg -framerate 30 -i ' + \
     'output/contours/' + '%1d_contours.jpg -vcodec libx264 output/output_contours.mp4 -y'
-command_png2mp4_marked='ffmpeg -framerate 30 -i ' + \
+command_png2mp4_marked = 'ffmpeg -framerate 30 -i ' + \
     'output/marked/' + '%1d_marked.jpg -vcodec libx264 output/output_marked.mp4 -y'
-command_png2mp4_morphed_original='ffmpeg -framerate 30 -i ' + \
-    'output/morphed_original/' + '%1d_morphed_original.jpg -vcodec libx264 output/output_morphed_original.mp4 -y'
+command_png2mp4_morphed_original = 'ffmpeg -framerate 30 -i ' + \
+    'output/morphed_original/' + \
+    '%1d_morphed_original.jpg -vcodec libx264 output/output_morphed_original.mp4 -y'
+
 
 def clean_files():
     """
@@ -27,7 +29,6 @@ def clean_files():
                        'output/marked',
                        'output/morphed_original']
 
-    
     for path in paths_to_remove:
         for f in os.listdir(path):
             try:
@@ -43,13 +44,10 @@ def clean_files():
         for path in paths_to_remove:
             for f in os.listdir(path):
                 # print(f)
-                if ('jpg' or 'png' or 'jpeg' or 'bmp')  in f:
+                if ('jpg' or 'png' or 'jpeg' or 'bmp') in f:
                     os.remove(os.path.join(path, f))
     except Exception as e:
         print(e)
-
-
-
 
 
 def split_video_by_frame(video_path, input_drop_path):
@@ -96,11 +94,19 @@ def process_images_from_path(input_path):
 
     # Resize all images
     for f in os.listdir(input_path):
-        
+
         if ('jpg' or 'png' or 'jpeg' or 'bmp') in f:
             print(str(input_path+f))
 
-            PD = PlantDetection(image=input_path+f, morph=15, iterations=2, debug=True)
+            PD = PlantDetection(image=input_path+f,
+                                morph=15,
+                                iterations=2,
+                                debug=True,
+                                HSV_min=[90, 255, 255],
+                                HSV_max=[90, 255, 255],
+                                array=[{"size": 25, "kernel": 'ellipse', "type": 'erode',  "iters": 15},
+                                       {"size": 15, "kernel": 'ellipse', "type": 'dilate', "iters": 15}],
+                                )
             PD.detect_plants()
 
             # print(f[:-4]+'_contours.jpg')
@@ -117,7 +123,8 @@ def process_images_from_path(input_path):
 
             cv.imwrite('output/contours/'+f[:-4]+'_contours.jpg', c)
             cv.imwrite('output/marked/'+f[:-4]+'_marked.jpg', mo)
-            cv.imwrite('output/morphed_original/'+f[:-4]+'_morphed_original.jpg', ma)
+            cv.imwrite('output/morphed_original/' +
+                       f[:-4]+'_morphed_original.jpg', ma)
 
 
 if __name__ == '__main__':
@@ -196,7 +203,15 @@ if __name__ == '__main__':
                 f.write(uploaded_file.getbuffer())
 
             PD = PlantDetection(image=input_path+'image.jpg',
-                                morph=15, iterations=2, debug=True)
+                                morph=15,
+                                iterations=2,
+                                debug=True,
+                                HSV_min=[0, 59, 151],
+                                HSV_max=[20, 138, 212],
+                                array=[{"size": 3, "kernel": 'ellipse', "type": 'erode',  "iters": 5},
+                                       {"size": 5, "kernel": 'ellipse', "type": 'dilate', "iters": 10},
+                                ]
+                                )
             PD.detect_plants()
 
             st.subheader("Image contours")
