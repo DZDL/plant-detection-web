@@ -102,10 +102,11 @@ def process_images_from_path(input_path):
                                 morph=15,
                                 iterations=2,
                                 debug=True,
-                                HSV_min=[90, 255, 255],
-                                HSV_max=[90, 255, 255],
-                                array=[{"size": 25, "kernel": 'ellipse', "type": 'erode',  "iters": 15},
-                                       {"size": 15, "kernel": 'ellipse', "type": 'dilate', "iters": 15}],
+                                HSV_min=[0, 59, 151],
+                                HSV_max=[20, 138, 212],
+                                array=[{"size": 3, "kernel": 'ellipse', "type": 'erode',  "iters": 5},
+                                       {"size": 5, "kernel": 'ellipse', "type": 'dilate', "iters": 10},
+                                ]
                                 )
             PD.detect_plants()
 
