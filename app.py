@@ -27,7 +27,8 @@ def clean_files():
                        'output',
                        'output/contours',
                        'output/marked',
-                       'output/morphed_original']
+                       'output/morphed_original',
+                       './']
 
     for path in paths_to_remove:
         for f in os.listdir(path):
@@ -37,17 +38,6 @@ def clean_files():
                     os.remove(os.path.join(path, f))
             except Exception as e:
                 print(e)
-
-    paths_to_remove = ['./']
-
-    try:
-        for path in paths_to_remove:
-            for f in os.listdir(path):
-                # print(f)
-                if ('jpg' or 'png' or 'jpeg' or 'bmp') in f:
-                    os.remove(os.path.join(path, f))
-    except Exception as e:
-        print(e)
 
 
 def split_video_by_frame(video_path, input_drop_path):
@@ -105,8 +95,8 @@ def process_images_from_path(input_path):
                                 HSV_min=[0, 59, 151],
                                 HSV_max=[20, 138, 212],
                                 array=[{"size": 3, "kernel": 'ellipse', "type": 'erode',  "iters": 5},
-                                       {"size": 5, "kernel": 'ellipse', "type": 'dilate', "iters": 10},
-                                ]
+                                       {"size": 5, "kernel": 'ellipse',"type": 'dilate', "iters": 10},
+                                       ]
                                 )
             PD.detect_plants()
 
@@ -133,13 +123,14 @@ if __name__ == '__main__':
     clean_files()
 
     st.title("Plant Detection")
-
-    st.text("Descripción: ...")
+    st.text("Parte de tesis2, detección de vegetación.")
+    st.text("Aplicación web: Liz F., Milagros M.")
+    st.text("Versión: 0.2.1")
 
     # Upload file
-    st.subheader("- Choose a file (video or image)")
-    uploaded_file = st.file_uploader("Elige una imagen compatible", type=[
-        'png', 'jpg', 'bmp', 'jpeg', 'mp4'])
+    st.subheader("1. Elige una imagen o video")
+    uploaded_file = st.file_uploader("Elige una imagen compatible",
+                                     type=['png', 'jpg', 'bmp', 'jpeg', 'mp4'])
 
     if uploaded_file is not None:  # File > 0 bytes
 
@@ -210,8 +201,9 @@ if __name__ == '__main__':
                                 HSV_min=[0, 59, 151],
                                 HSV_max=[20, 138, 212],
                                 array=[{"size": 3, "kernel": 'ellipse', "type": 'erode',  "iters": 5},
-                                       {"size": 5, "kernel": 'ellipse', "type": 'dilate', "iters": 10},
-                                ]
+                                       {"size": 5, "kernel": 'ellipse',
+                                           "type": 'dilate', "iters": 10},
+                                       ]
                                 )
             PD.detect_plants()
 
