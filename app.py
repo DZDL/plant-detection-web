@@ -198,12 +198,13 @@ if __name__ == '__main__':
                                 morph=15,
                                 iterations=2,
                                 debug=True,
-                                # HSV_min=[0, 59, 151],
-                                # HSV_max=[20, 138, 212],
-                                # array=[{"size": 3, "kernel": 'ellipse', "type": 'erode',  "iters": 5},
-                                #        {"size": 5, "kernel": 'ellipse',
-                                #            "type": 'dilate', "iters": 10},
-                                #        ]
+                                HSV_min=[0, 97, 0],
+                                HSV_max=[24, 190, 102],
+                                array=[{"size": 3, "kernel": 'ellipse', "type": 'erode',  "iters": 5},
+                                       {"size": 5, "kernel": 'ellipse',"type": 'dilate', "iters": 10},
+                                       {"size": 3, "kernel": 'ellipse', "type": 'erode',  "iters": 5},
+                                       {"size": 5, "kernel": 'ellipse',"type": 'dilate', "iters": 10},
+                                       ]
                                 )
             PD.detect_plants()
 

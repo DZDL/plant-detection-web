@@ -5,3 +5,4 @@ redis==3.5.3
 streamlit==0.72.0
 imutils
 matplotlib
+# opencv-contrib-python
