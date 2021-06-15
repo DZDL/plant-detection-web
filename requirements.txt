@@ -1,8 +1,8 @@
-opencv-contrib-python-headless==4.5.1.48
-numpy==1.19.5
-requests==2.25.0
-redis==3.5.3
-streamlit==0.72.0
+opencv-contrib-python-headless>=4.5.1.48
+numpy>=1.19.5
+requests>=2.25.0
+redis>=3.5.3
+streamlit>=0.72.0
 imutils
 matplotlib
 # opencv-contrib-python
