@@ -21,6 +21,8 @@ command_png2mp4_morphed_original = 'ffmpeg -framerate 30 -i ' + \
     'output/morphed_original/' + \
     '%1d_morphed_original.jpg -vcodec libx264 output/output_morphed_original.mp4 -y'
 
+METHODS = ['Con fondo', 'Sin fondo']
+
 
 def clean_files():
     """
@@ -390,7 +392,13 @@ if __name__ == '__main__':
     st.title("Detección de vegetación")
     st.text("Parte de Tesis 2")
     st.text("Aplicación web: Liz F., Milagros M.")
-    st.text("Versión: 0.2.10")
+    st.text("Versión: 0.2.21")
+
+    # Method to process video
+    st.subheader("1. Method to process video")
+    methods = st.radio(
+        "",
+        (METHODS[0], METHODS[1]))
 
     # Upload file
     st.subheader("1. Elige una imagen o video")
@@ -461,41 +469,87 @@ if __name__ == '__main__':
 
             img_original = cv.imread(
                 input_path+'image.jpg', cv.IMREAD_UNCHANGED)
-            masked, masked_inv, eroded, eroded_inv = remove_background_2(img_original,
-                                                                         plot_images=False)
-            cv.imwrite(input_path+'image_processed.jpg', masked)
 
-            PD = PlantDetection(image=input_path+'image_processed.jpg',
-                                morph=15,
-                                iterations=2,
-                                debug=True,
-                                HSV_min=[0, 180, 150],
-                                HSV_max=[47, 208, 158],
-                                # array=[{"size": 3, "kernel": 'ellipse', "type": 'erode',  "iters": 5},
-                                #        {"size": 5, "kernel": 'ellipse',"type": 'dilate', "iters": 10},
-                                #        {"size": 3, "kernel": 'ellipse', "type": 'erode',  "iters": 5},
-                                #        {"size": 5, "kernel": 'ellipse',"type": 'dilate', "iters": 10},
-                                #        ]
-                                )
-            PD.detect_plants()
+            if methods == METHODS[0]:
+                #######################################
+                # CON FONDO
+                #######################################
 
-            st.subheader("Image contours")
-            st.image("image_processed_contours.jpg", caption='Image contours',
-                     channels="BGR", use_column_width=True)
+                PD = PlantDetection(image=input_path+'image.jpg',
+                                    morph=15,
+                                    iterations=2,
+                                    debug=True,
+                                    )
+                PD.detect_plants()
 
-            # st.subheader("Image morphed")
-            # st.image("image_morphed.jpg", caption="Image morphed",
-            #          channels="BGR", use_column_width=True)
+                st.subheader("Image contours")
+                st.image("image_contours.jpg",
+                         caption='Image contours',
+                         channels="BGR",
+                         use_column_width=True)
 
-            st.subheader("Image morphed original")
-            st.image("image_processed_morphed_original.jpg", caption="Image morphed original",
-                     channels="BGR", use_column_width=True)
+                # st.subheader("Image morphed")
+                # st.image("image_morphed.jpg", caption="Image morphed",
+                #          channels="BGR", use_column_width=True)
 
+                st.subheader("Image morphed original")
+                st.image("image_morphed_original.jpg",
+                         caption="Image morphed original",
+                         channels="BGR",
+                         use_column_width=True)
 
-            # Merge masks with background
-            img=cv.imread('image_processed_marked.jpg', cv.IMREAD_UNCHANGED)
-            result=cv.bitwise_and(img,masked_inv)
+                st.subheader("Image marked")
+                st.image("image_marked.jpg",
+                         caption='Image marked',
+                         channels="BGR",
+                         use_column_width=True)
 
-            st.subheader("Image marked")
-            st.image(result, caption='Image marked',
-                     channels="BGR", use_column_width=True)
+            if methods == METHODS[1]:
+                #######################################
+                # SIN FONDO
+                #######################################
+
+                masked, masked_inv, eroded, eroded_inv = remove_background_2(img_original,
+                                                                             plot_images=False)
+                cv.imwrite(input_path+'image_processed.jpg', masked)
+
+                PD = PlantDetection(image=input_path+'image_processed.jpg',
+                                    morph=15,
+                                    iterations=2,
+                                    debug=True,
+                                    HSV_min=[0, 180, 150],
+                                    HSV_max=[47, 208, 158],
+                                    # array=[{"size": 3, "kernel": 'ellipse', "type": 'erode',  "iters": 5},
+                                    #        {"size": 5, "kernel": 'ellipse',"type": 'dilate', "iters": 10},
+                                    #        {"size": 3, "kernel": 'ellipse', "type": 'erode',  "iters": 5},
+                                    #        {"size": 5, "kernel": 'ellipse',"type": 'dilate', "iters": 10},
+                                    #        ]
+                                    )
+                PD.detect_plants()
+
+                st.subheader("Image contours")
+                st.image("image_processed_contours.jpg",
+                         caption='Image contours',
+                         channels="BGR",
+                         use_column_width=True)
+
+                # st.subheader("Image morphed")
+                # st.image("image_morphed.jpg", caption="Image morphed",
+                #          channels="BGR", use_column_width=True)
+
+                st.subheader("Image morphed original")
+                st.image("image_processed_morphed_original.jpg",
+                         caption="Image morphed original",
+                         channels="BGR",
+                         use_column_width=True)
+
+                # Merge masks with background
+                img = cv.imread('image_processed_marked.jpg',
+                                cv.IMREAD_UNCHANGED)
+                result = cv.bitwise_and(img, masked_inv)
+
+                st.subheader("Image marked")
+                st.image(result,
+                         caption='Image marked',
+                         channels="BGR",
+                         use_column_width=True)

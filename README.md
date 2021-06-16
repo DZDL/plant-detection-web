@@ -44,8 +44,8 @@ Only maintainers of the repository can do this.
 heroku login
 docker ps
 heroku container:login
-heroku container:push web -a plant-detection-web
-heroku container:release web -a plant-detection-web
+heroku container:push web -a vegetation-detector
+heroku container:release web -a vegetation-detector
 ```
 
 <!-- - Automatic deploy comming (working)

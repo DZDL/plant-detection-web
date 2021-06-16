@@ -1,7 +1,7 @@
 docker stop $(docker ps -aq) && docker rm $(docker ps -aq)
-docker build --tag pablogod/plantdetector:1.15 .
-docker run --publish 8501:8501 --detach pablogod/plantdetector:1.15
-docker run --publish 8501:8501 pablogod/plantdetector:1.15
-docker push pablogod/plantdetector:1.15
+docker build --tag pablogod/plantdetector:1.21 .
+docker run --publish 8501:8501 --detach pablogod/plantdetector:1.21
+docker run --publish 8501:8501 pablogod/plantdetector:1.21
+docker push pablogod/plantdetector:1.21
 
 streamlit run app.py
